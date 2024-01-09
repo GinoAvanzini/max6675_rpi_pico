@@ -1,6 +1,7 @@
 from machine import SPI, Pin, UART
 import time
 import sys
+import json
 
 spi = SPI(0, sck=Pin(18), mosi=None, miso=Pin(16), 
           baudrate=4_000_000, polarity=0, phase=1, bits=8)
@@ -19,7 +20,9 @@ def main():
         temperature_binary = int.from_bytes(read_max6675(), 'big')
         bitmask = ~(0b1000_0000_0000_0111)
         temp_dec = int( (temperature_binary & bitmask) >> 3)
-        uart1.write(str(temp_dec*0.25) + "\r\n")
+        temp_as_json = json.dumps({"T_thc": str(str(temp_dec*0.25)),
+                                   "ts": time.ticks_ms()})
+        uart1.write(temp_as_json + "\r\n")
         time.sleep_ms(250)
 
 
