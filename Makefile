@@ -1,4 +1,5 @@
 VENV_ACT = source venv/bin/activate
+BAUDRATE = 1000000
 SERIAL_DEV := $(shell $(VENV_ACT) ; python get_dev_port.py serial)
 RPICO_DEV := $(shell $(VENV_ACT) ; python get_dev_port.py cdc)
 
@@ -12,5 +13,5 @@ flash:
 	$(VENV_ACT) ; rshell -p $(RPICO_DEV) cp src/main_spi.py /pyboard/main.py
 
 serial:
-	minicom -o -D $(SERIAL_DEV) -b 1000000
-
+	#minicom -o -w -D $(SERIAL_DEV) -b $(BAUDRATE) 
+	$(VENV_ACT) ; python -m serial.tools.miniterm $(SERIAL_DEV) $(BAUDRATE) --eol LF

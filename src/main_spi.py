@@ -13,7 +13,6 @@ def main():
 
     uart1.init(baudrate=1_000_000, tx=Pin(4), rx=Pin(5))
     time.sleep(2)
-    uart1.write("Hello from pico!\r\n")
     uart1.flush()
 
     while(True):
@@ -22,7 +21,7 @@ def main():
         temp_dec = int( (temperature_binary & bitmask) >> 3)
         temp_as_json = json.dumps({"T_thc": str(str(temp_dec*0.25)),
                                    "ts": time.ticks_ms()})
-        uart1.write(temp_as_json + "\r\n")
+        uart1.write(temp_as_json + "\n")
         time.sleep_ms(250)
 
 
