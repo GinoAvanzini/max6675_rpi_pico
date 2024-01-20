@@ -19,7 +19,7 @@ def main():
         temperature_binary = int.from_bytes(read_max6675(), 'big')
         bitmask = ~(0b1000_0000_0000_0111)
         temp_dec = int( (temperature_binary & bitmask) >> 3)
-        temp_as_json = json.dumps({"T_thc": str(str(temp_dec*0.25)),
+        temp_as_json = json.dumps({"T_thc": round(temp_dec*0.25, 2),
                                    "ts": time.ticks_ms()})
         uart1.write(temp_as_json + "\n")
         time.sleep_ms(250)
