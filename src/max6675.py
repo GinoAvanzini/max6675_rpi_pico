@@ -7,6 +7,7 @@ class MAX6675:
     def __init__(self, SPI, CS):
         self.SPI = SPI
         self.CS = CS
+        self.last_reading = None
 
     def get_temperature_bytes(self):
         rxdata = bytearray(2)
@@ -23,7 +24,8 @@ class MAX6675:
         temperature_binary = int.from_bytes(self.get_temperature_bytes(), 'big')
         bitmask = ~(0b1000_0000_0000_0111)
         temp_dec = int( (temperature_binary & bitmask) >> 3)
-        return temp_dec*0.25
+        self.last_reading = temp_dec*0.25
+        return self.last_reading
 
 
 def main():
